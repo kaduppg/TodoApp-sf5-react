@@ -72,7 +72,7 @@ class TodoController extends AbstractController
         try {
             $this->entityManager->flush();
             return $this->json([
-                'message' => 'Todo has been updated.'
+                'message' => 'the task has been updated.'
             ]);
         } catch (Exception $e) {
             //error msg
@@ -83,8 +83,19 @@ class TodoController extends AbstractController
     /**
     * @Route("/delete/{id}", name="api_todo_delete" , methods={"DELETE"})
     */
-    public function delete (Request $request, Todo $todo)
+    public function delete (Todo $todo)
     {
+        try {
+            $this->entityManager->remove($todo);
+            $this->entityManager->flush();
+
+            return $this->json([
+                'message' => 'the task has been deleted.'
+            ]);
+
+        } catch (Exception $e) {
+            //error msg 
+        }
 
     }
 }
