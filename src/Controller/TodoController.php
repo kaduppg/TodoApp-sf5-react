@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Todo;
+use App\Form\TodoType;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -46,19 +47,42 @@ class TodoController extends AbstractController
     public function create(Request $request)
     {
        $content = json_decode($request->getContent());
+
+       $form = $this->createForm(TodoType::class);
+       $form->submit((array)$content);
+
+       if(!$form->isValid()){
+           $erros = [];
+           foreach ($form->getErrors(true,true) as $error) {
+              $propertyName = $error->getOrigin()->getName();
+              $errors[$propertyName] = $error->getMessage(); 
+           }
+            return $this->json([
+                'message' => ['text' => join("\n", $errors), 'level' => 'error']
+            ]);
+       }
+
        $todo = new Todo();
        $todo->setTask($content->task);
+       $todo->setDescription($content->description);
 
        try {
           $this->entityManager->persist($todo);
           $this->entityManager->flush();
-          return $this->json([
-            'todo' => $todo->toArray()
-          ]);
-
+         
        } catch (Exception $e) {
-           // error message
+           return $this->json([
+               'message'=> ['text'=> 'Could not reach database when attempting to create a to-do' , 
+               'level'=>'error']
+           ]);
        }
+
+       return $this->json([
+            'todo' => $todo->toArray(),
+            'message' => ['text'=> 'To-do has been created!', 'level' => 'success']
+       ]);
+
+
     }
 
     /**
@@ -67,16 +91,41 @@ class TodoController extends AbstractController
     public function update (Request $request, Todo $todo)
     {
         $content  = json_decode($request->getContent());
+
+        $form = $this->createForm(TodoType::class);
+
+        $nonObject = (array)$content;
+        unset($nonObject['id']);
+        $form->submit((array)$nonObject);
+
+       if(!$form->isValid()){
+           $erros = [];
+           foreach ($form->getErrors(true,true) as $error) {
+              $propertyName = $error->getOrigin()->getName();
+              $errors[$propertyName] = $error->getMessage(); 
+           }
+            return $this->json([
+                'message' => ['text' => join("\n", $errors), 'level' => 'error']
+            ]);
+       }
+
         $todo->setTask($content->task);
+        $todo->setDescription($content->description);
 
         try {
             $this->entityManager->flush();
-            return $this->json([
-                'message' => 'the task has been updated.'
-            ]);
+        
         } catch (Exception $e) {
-            //error msg
+            return $this->json([
+                'message'=> ['text'=> 'Could not reach database when attempting to update a to-do' , 
+                'level'=>'error']
+            ]);
         }
+
+        return $this->json([
+            'todo' => $todo->toArray(),
+            'message' => ['text'=> 'To-do successfully updated!', 'level' => 'success']
+        ]);
 
     }
 
@@ -89,13 +138,16 @@ class TodoController extends AbstractController
             $this->entityManager->remove($todo);
             $this->entityManager->flush();
 
-            return $this->json([
-                'message' => 'the task has been deleted.'
-            ]);
-
         } catch (Exception $e) {
-            //error msg 
+            return $this->json([
+                'message'=> ['text'=> 'Could not reach database when attempting to delete a to-do' , 
+                'level'=>'error']
+            ]);
         }
+
+        return $this->json([
+            'message' => ['text'=> 'To-do had successfully been deleted!', 'level' => 'success']
+        ]);
 
     }
 }

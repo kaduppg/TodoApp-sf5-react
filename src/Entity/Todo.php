@@ -19,9 +19,14 @@ class Todo
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=10, unique=true)
      */
     private $task;
+
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private $description;
 
     public function getId(): ?int
     {
@@ -42,7 +47,22 @@ class Todo
 
     public function toArray()
     {
-        return ['id'=> $this->id, 'task'=>$this->task];
+        return [
+            'id'=> $this->id, 
+            'task'=>$this->task, 
+            'description'=> $this->description];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
 }
