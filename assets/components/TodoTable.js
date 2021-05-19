@@ -8,12 +8,11 @@ import React, { Fragment, useContext, useState } from 'react';
 import { TodoContext } from '../contexts/TodoContext';
 import DeleteDialog from './DeleteDialog';
 
-
 const useStyles = makeStyles(theme => ({
     thead: {
         backgroundColor: theme.palette.primary.main,
-    }
-}))
+    },
+}));
 
 function TodoTable() {
     const context = useContext(TodoContext);
@@ -46,22 +45,12 @@ function TodoTable() {
         <Fragment>
 
             <Table>
-                <TableHead> 
-                    <TableRow>
-
-                        <TableCell> Taks </TableCell>
-
-                        <TableCell align="right"> Actions </TableCell>
-
-                    </TableRow>
-                </TableHead>
-
-                <TableBody>
-
+            <TableHead>
                     <TableRow>
                         <TableCell>
                             <form onSubmit={onCreateSubmit}>
                                 <TextField
+                                    variant="outlined"
                                     type="text"
                                     value={addTodoTask}
                                     onChange={(event) => {
@@ -76,6 +65,7 @@ function TodoTable() {
                         <TableCell>
                             <form>
                                 <TextField
+                                    variant="outlined"
                                     type="text"
                                     value={addTodoDescription}
                                     onChange={(event) => {
@@ -96,6 +86,16 @@ function TodoTable() {
                         </TableCell>
 
                     </TableRow>
+                    <TableRow className={classes.thead}>
+                        <TableCell width={200}>Task</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+
+
+                <TableBody>
+                   
                     {context.todos.slice().reverse().map((todo, index) => (
 
                         <TableRow key={'todo ' + index}>

@@ -1,6 +1,5 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios';
-import { DataUsageTwoTone } from '@material-ui/icons';
 
 export const TodoContext = createContext();
 
