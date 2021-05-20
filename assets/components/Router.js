@@ -10,7 +10,7 @@ import TodoTable from './TodoTable';
 import Navigation from './Navigation';
 
 import NotFound from './NotFound'
-
+import Login from './Login';
 
 
 const TodoList = () => (
@@ -36,6 +36,7 @@ const Router = () => {
                 <Redirect exact from="/" to="/todo-list" />
                 <Route exact path="/todo-list" component={TodoList}/>
                 <Route exact path="/tag-list" component={null}/>
+                <Route exact path="/login" component={Login}/>
                 <Route component={NotFound} />
             </Switch>
         </BrowserRouter>

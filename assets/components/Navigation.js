@@ -1,7 +1,8 @@
 import { AppBar, Box, Button, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import {Menu as MenuIcon, List as ListIcon, Label as LabelIcon} from '@material-ui/icons';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import Login from './Login';
 
 
 const useStyles = makeStyles(theme =>({
@@ -51,7 +52,12 @@ const Navigation = () => {
                     <Typography color="textPrimary" variant="h6">TodoApp</Typography>
                 </Link>
                 <Box flexGrow={1}/>
-                <Button size="large">Login</Button>
+
+                <NavLink style={{textDecoration: 'none'}} to="/login">
+                    <Button color="primary"  variant="contained" size="large"> Login </Button>
+                </NavLink>
+
+
             </Toolbar>
             <Drawer anchor="left" variant="temporary" onClose={toggleDrawer} open={drawerOpen}>
                 {drawerItems.map(prop =>(
@@ -62,8 +68,7 @@ const Navigation = () => {
                         </ListItem>
                     </Link>
                 ) )}
-                    
-             
+                
             </Drawer>
         </AppBar>
     );

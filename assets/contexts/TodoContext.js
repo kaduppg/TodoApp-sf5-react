@@ -14,7 +14,6 @@ class TodoContextProvider extends Component {
         };
 
         this.readTodo();
-
     }
 
 
